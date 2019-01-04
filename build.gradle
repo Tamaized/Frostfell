@@ -33,7 +33,7 @@ minecraft {
     mappings = "${project.forgeMapping}"
     makeObfSourceJar = false
     useDepAts = true
-    replaceIn 'AoV.java'
+    replaceIn 'Frostfell.java'
     replace '${version}', "${modVersion}${modVersionValue}"
 }
 
