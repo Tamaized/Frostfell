@@ -23,6 +23,8 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import tamaized.frostfell.registry.ModBlocks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,7 +32,7 @@ import java.util.Random;
 
 public class ChunkGeneratorFrostfell implements IChunkGenerator {
 
-	protected static final IBlockState FILLER_BLOCK = Blocks.PACKED_ICE.getDefaultState();
+	protected static final IBlockState FILLER_BLOCK = ModBlocks.icystone.getDefaultState();
 	private final Random rand;
 	private final World world;
 	private final WorldType terrainType;
@@ -53,7 +55,7 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 	private MapGenBase caveGenerator = new MapGenCaves() {
 		@Override
 		protected boolean canReplaceBlock(IBlockState p_175793_1_, IBlockState p_175793_2_) {
-			return super.canReplaceBlock(p_175793_1_, p_175793_2_) || p_175793_1_.getBlock() == Blocks.PACKED_ICE || p_175793_1_.getBlock() == Blocks.ICE || p_175793_1_.getBlock() == Blocks.FROSTED_ICE;
+			return super.canReplaceBlock(p_175793_1_, p_175793_2_) || p_175793_1_.getBlock() == Blocks.PACKED_ICE || p_175793_1_.getBlock() == Blocks.ICE || p_175793_1_.getBlock() == Blocks.FROSTED_ICE || p_175793_1_ == FILLER_BLOCK;
 		}
 
 		@Override
@@ -92,6 +94,7 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 			return false;
 		}
 	};
+	private WorldGenMinable oreGen = new WorldGenMinable(ModBlocks.icyore.getDefaultState(), 6, s -> s == FILLER_BLOCK);
 	private Biome[] biomesForGeneration;
 
 	public ChunkGeneratorFrostfell(World worldIn, long seed) {
@@ -371,6 +374,10 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 		ChunkPos chunkpos = new ChunkPos(x, z);
 
 		net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, this.world, this.rand, x, z, flag);
+
+		for(int loops = 0; loops < 5; loops++)
+		oreGen/*.generate(world, rand, blockpos)*/
+		/*new WorldGenMinable(ModBlocks.icyore.getDefaultState(), 6, s -> s == FILLER_BLOCK)*/.generate(world, rand, blockpos.add(rand.nextInt(16), rand.nextInt(100), rand.nextInt(16)));
 
 		if (biome != Biomes.DESERT && biome != Biomes.DESERT_HILLS && this.settings.useWaterLakes && !flag && this.rand.nextInt(this.settings.waterLakeChance) == 0)
 			if (net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAKE)) {

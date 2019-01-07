@@ -80,7 +80,7 @@ public class BiomeProviderModded extends BiomeProvider {
 		try {
 			for (int i = 0; i < par4 * par5; ++i) {
 				par1ArrayOfBiomeGenBase[i] = Biome.getBiome(aint[i]);
-				if(par1ArrayOfBiomeGenBase[i] == null)
+				if (par1ArrayOfBiomeGenBase[i] == null)
 					par1ArrayOfBiomeGenBase[i] = biomesToSpawnIn.get(0);
 			}
 
@@ -117,7 +117,7 @@ public class BiomeProviderModded extends BiomeProvider {
 
 			for (int i = 0; i < width * length; ++i) {
 				listToReuse[i] = Biome.getBiome(aint[i]);
-				if(listToReuse[i] == null)
+				if (listToReuse[i] == null)
 					listToReuse[i] = biomesToSpawnIn.get(0);
 			}
 			return listToReuse;
