@@ -45,7 +45,7 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 	double[] minLimitRegion;
 	double[] maxLimitRegion;
 	double[] depthRegion;
-	private IBlockState oceanBlock = Blocks.FROSTED_ICE.getDefaultState();
+	private IBlockState oceanBlock = Blocks.PACKED_ICE.getDefaultState();
 	private NoiseGeneratorOctaves minLimitPerlinNoise;
 	private NoiseGeneratorOctaves maxLimitPerlinNoise;
 	private NoiseGeneratorOctaves mainPerlinNoise;
@@ -375,9 +375,8 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 
 		net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(true, this, this.world, this.rand, x, z, flag);
 
-		for(int loops = 0; loops < 5; loops++)
-		oreGen/*.generate(world, rand, blockpos)*/
-		/*new WorldGenMinable(ModBlocks.icyore.getDefaultState(), 6, s -> s == FILLER_BLOCK)*/.generate(world, rand, blockpos.add(rand.nextInt(16), rand.nextInt(100), rand.nextInt(16)));
+		for (int loops = 0; loops < 5; loops++)
+			oreGen.generate(world, rand, blockpos.add(rand.nextInt(16), rand.nextInt(100), rand.nextInt(16)));
 
 		if (biome != Biomes.DESERT && biome != Biomes.DESERT_HILLS && this.settings.useWaterLakes && !flag && this.rand.nextInt(this.settings.waterLakeChance) == 0)
 			if (net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, flag, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.LAKE)) {
