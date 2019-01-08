@@ -15,6 +15,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import tamaized.frostfell.Frostfell;
+import tamaized.frostfell.common.block.BlockIcicle;
 import tamaized.frostfell.common.block.BlockIcyOre;
 
 import static tamaized.frostfell.registry.ModCreativeTabs.TAB;
@@ -25,6 +26,7 @@ public class ModBlocks {
 
 	public static final Block icystone = Blocks.AIR;
 	public static final Block icyore = Blocks.AIR;
+	public static final Block icicle = Blocks.AIR;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -32,7 +34,9 @@ public class ModBlocks {
 
 				assign(new Block(Material.ROCK, MapColor.STONE), "icystone").setHardness(1.5F).setResistance(10.0F),
 
-				assign(new BlockIcyOre(Material.ROCK, MapColor.ICE), "icyore").setHardness(3.0F).setResistance(5.0F)
+				assign(new BlockIcyOre(Material.ROCK, MapColor.ICE), "icyore").setHardness(3.0F).setResistance(5.0F),
+
+				assign(new BlockIcicle(Material.ICE, MapColor.ICE), "icicle").setHardness(0.0F).setLightOpacity(3)
 
 		);
 	}
@@ -43,7 +47,9 @@ public class ModBlocks {
 
 				assign(new ItemBlock(icystone), "icystone"),
 
-				assign(new ItemBlock(icyore), "icyore")
+				assign(new ItemBlock(icyore), "icyore"),
+
+				assign(new ItemBlock(icicle), "icicle")
 
 		);
 	}
@@ -52,6 +58,7 @@ public class ModBlocks {
 	public static void registerModels(ModelRegistryEvent event) {
 		registerModel(icystone, 0, "");
 		registerModel(icyore, 0, "");
+		registerModel(icicle, 0, "");
 	}
 
 	private static Block assign(Block block, String name) {

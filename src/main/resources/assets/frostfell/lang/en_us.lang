@@ -2,5 +2,7 @@ itemGroup.frostfell=Frostfell
 
 tile.frostfell.icystone.name=Icy Stone
 tile.frostfell.icyore.name=Icy Ore
+tile.frostfell.icicle.name=Icicle
 
 item.frostfell.permafrost.name=Permafrost
+item.frostfell.iceshard.name=Ice Shard

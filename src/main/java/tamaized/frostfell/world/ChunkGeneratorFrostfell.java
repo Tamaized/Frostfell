@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -24,6 +25,9 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.feature.WorldGenLakes;
 import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.common.Mod;
+import tamaized.frostfell.common.block.BlockIcicle;
 import tamaized.frostfell.registry.ModBlocks;
 
 import javax.annotation.Nullable;
@@ -95,6 +99,23 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 		}
 	};
 	private WorldGenMinable oreGen = new WorldGenMinable(ModBlocks.icyore.getDefaultState(), 6, s -> s == FILLER_BLOCK);
+	private WorldGenerator icicleGen = new WorldGenerator() {
+		@Override
+		public boolean generate(World worldIn, Random rand, BlockPos position) {
+			boolean flag = false;
+
+			for (int i = 0; i < 64; ++i) {
+				BlockPos blockpos = position.add(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
+
+				if (worldIn.isAirBlock(blockpos) && BlockIcicle.canBlockStay(worldIn, blockpos)) {
+					worldIn.setBlockState(blockpos, ModBlocks.icicle.getDefaultState(), 2);
+					flag = true;
+				}
+			}
+
+			return flag;
+		}
+	};
 	private Biome[] biomesForGeneration;
 
 	public ChunkGeneratorFrostfell(World worldIn, long seed) {
@@ -219,9 +240,7 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 		}
 	}
 
-	/**
-	 * Generates the chunk at the specified position, from scratch
-	 */
+	@Override
 	public Chunk generateChunk(int x, int z) {
 		this.rand.setSeed((long) x * 341873128712L + (long) z * 132897987541L);
 		ChunkPrimer chunkprimer = new ChunkPrimer();
@@ -354,12 +373,7 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 		}
 	}
 
-	/**
-	 * Generate initial structures in this chunk, e.g. mineshafts, temples, lakes, and dungeons
-	 *
-	 * @param x Chunk x coordinate
-	 * @param z Chunk z coordinate
-	 */
+	@Override
 	public void populate(int x, int z) {
 		BlockFalling.fallInstantly = true;
 		int i = x * 16;
@@ -427,6 +441,8 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 					}
 				}
 			}
+			for (int loops = 0; loops < 35; loops++)
+				icicleGen.generate(world, rand, blockpos.add(rand.nextInt(16), 64 + rand.nextInt(190), rand.nextInt(16)));
 		}//Forge: End ICE
 
 		net.minecraftforge.event.ForgeEventFactory.onChunkPopulate(false, this, this.world, this.rand, x, z, flag);
@@ -434,33 +450,28 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 		BlockFalling.fallInstantly = false;
 	}
 
-	/**
-	 * Called to generate additional structures after initial worldgen, used by ocean monuments
-	 */
+	@Override
 	public boolean generateStructures(Chunk chunkIn, int x, int z) {
-		boolean flag = false;
-		return flag;
+		return false;
 	}
 
+	@Override
 	public List<Biome.SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
-		Biome biome = this.world.getBiome(pos);
-		return biome.getSpawnableList(creatureType);
+		return world.getBiome(pos).getSpawnableList(creatureType);
 	}
 
+	@Override
 	public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {
 		return false;
 	}
 
+	@Override
 	@Nullable
 	public BlockPos getNearestStructurePos(World worldIn, String structureName, BlockPos position, boolean findUnexplored) {
 		return null;
 	}
 
-	/**
-	 * Recreates data about structures intersecting given chunk (used for example by getPossibleCreatures), without
-	 * placing any blocks. When called for the first time before any chunk is generated - also initializes the internal
-	 * state needed by getPossibleCreatures.
-	 */
+	@Override
 	public void recreateStructures(Chunk chunkIn, int x, int z) {
 
 	}
