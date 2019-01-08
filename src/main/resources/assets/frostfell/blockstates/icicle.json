@@ -1,11 +1,16 @@
 {
   "forge_marker": 1,
   "defaults": {
-	"model": "tinted_cross",
-	"textures": { "cross": "frostfell:blocks/icicle/icicle_1" }
+	"model": "tinted_cross"
   },
   "variants": {
-	"inventory": [ { "parent": "item/generated" } ],
+	"inventory": [
+	  {
+		"model": "builtin/generated",
+		"transform": "forge:default-item",
+		"textures": { "layer0": "frostfell:blocks/icicle/icicle_3" }
+	  }
+	],
 	"normal": [
 	  { "textures": { "cross": "frostfell:blocks/icicle/icicle_1" } },
 	  { "textures": { "cross": "frostfell:blocks/icicle/icicle_2" } },
