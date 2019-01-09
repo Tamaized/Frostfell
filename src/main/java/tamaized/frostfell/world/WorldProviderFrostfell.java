@@ -8,6 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import tamaized.frostfell.client.world.FrostfellWeatherRenderer;
 
 public class WorldProviderFrostfell extends WorldProvider {
 
@@ -17,6 +18,8 @@ public class WorldProviderFrostfell extends WorldProvider {
 	protected void init() {
 		super.init();
 		biomeProvider = new BiomeProviderModded(world, new GenLayerFrostfell());
+		if (world.isRemote)
+			setWeatherRenderer(new FrostfellWeatherRenderer());
 	}
 
 	@Override
