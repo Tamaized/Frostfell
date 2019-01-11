@@ -9,3 +9,6 @@ tile.frostfell.snowbrick.name=Snow Brick
 
 item.frostfell.permafrost.name=Permafrost
 item.frostfell.iceshard.name=Ice Shard
+
+commands.frostfell.usage=/frostfell [ { weather [ clear, rain, thunder ] } ]
+commands.frostfell.weather.usage=/frostfell weather [ clear, rain, thunder ]

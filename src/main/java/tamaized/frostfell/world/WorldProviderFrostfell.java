@@ -6,17 +6,34 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import tamaized.frostfell.client.world.FrostfellWeatherRenderer;
+
+import java.lang.reflect.Field;
 
 public class WorldProviderFrostfell extends WorldProvider {
 
 	public static DimensionType dimType;
 
+	private static Field FIELD_worldInfo;
+
 	@Override
 	protected void init() {
 		super.init();
+		if (!world.isRemote) {
+			if (FIELD_worldInfo == null) {
+				FIELD_worldInfo = ReflectionHelper.findField(World.class, "field_72986_A", "worldInfo");
+				FIELD_worldInfo.setAccessible(true);
+			}
+			try {
+				FIELD_worldInfo.set(world, new WorldInfoFrostfell(world.getWorldInfo()));
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
 		biomeProvider = new BiomeProviderModded(world, new GenLayerFrostfell());
 		if (world.isRemote)
 			setWeatherRenderer(new FrostfellWeatherRenderer());

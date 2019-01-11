@@ -6,8 +6,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import tamaized.frostfell.common.command.CommandFrostfell;
 import tamaized.frostfell.world.WorldProviderFrostfell;
 
 @Mod(modid = Frostfell.MODID, version = Frostfell.VERSION, acceptedMinecraftVersions = "[1.12,)")
@@ -33,6 +35,11 @@ public class Frostfell {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 
+	}
+
+	@Mod.EventHandler
+	public void serverStart(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandFrostfell());
 	}
 
 }
