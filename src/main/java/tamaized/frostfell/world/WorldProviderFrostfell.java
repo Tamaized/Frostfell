@@ -9,6 +9,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import tamaized.frostfell.client.world.FrostfellWeatherRenderer;
 
@@ -25,7 +26,7 @@ public class WorldProviderFrostfell extends WorldProvider {
 		super.init();
 		if (!world.isRemote) {
 			if (FIELD_worldInfo == null) {
-				FIELD_worldInfo = ReflectionHelper.findField(World.class, "field_72986_A", "worldInfo");
+				FIELD_worldInfo = ObfuscationReflectionHelper.findField(World.class, "field_72986_A");
 				FIELD_worldInfo.setAccessible(true);
 			}
 			try {

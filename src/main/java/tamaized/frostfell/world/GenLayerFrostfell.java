@@ -11,6 +11,7 @@ import net.minecraft.world.gen.layer.GenLayerRiverInit;
 import net.minecraft.world.gen.layer.GenLayerSmooth;
 import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
 import net.minecraft.world.gen.layer.GenLayerZoom;
+import tamaized.frostfell.registry.ModBiomes;
 
 public class GenLayerFrostfell implements IGenLayer {
 
@@ -79,9 +80,11 @@ public class GenLayerFrostfell implements IGenLayer {
 
 				Biomes.ICE_MOUNTAINS,
 
+				ModBiomes.frozenwasteland,
+
 				Biomes.ICE_PLAINS,
 
-				Biomes.MUTATED_ICE_FLATS,
+				Biomes.MUTATED_ICE_FLATS
 
 		};
 	}

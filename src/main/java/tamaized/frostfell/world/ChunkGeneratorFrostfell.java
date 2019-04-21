@@ -356,8 +356,8 @@ public class ChunkGeneratorFrostfell implements IChunkGenerator {
 						d1 *= 4.0D;
 					}
 
-					double d2 = this.minLimitRegion[i] / (double) this.settings.lowerLimitScale;
-					double d3 = this.maxLimitRegion[i] / (double) this.settings.upperLimitScale;
+					double d2 = this.minLimitRegion[i] / (double) this.settings.lowerLimitScale * 2F;
+					double d3 = this.maxLimitRegion[i] / (double) this.settings.upperLimitScale * 3F;
 					double d4 = (this.mainNoiseRegion[i] / 10.0D + 1.0D) / 2.0D;
 					double d5 = MathHelper.clampedLerp(d2, d3, d4) - d1;
 
