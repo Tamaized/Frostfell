@@ -1,45 +1,47 @@
 package tamaized.frostfell;
 
-import net.minecraft.world.DimensionType;
+
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.command.CommandSource;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import tamaized.frostfell.common.command.CommandFrostfell;
+import tamaized.frostfell.common.command.FrostfellCommands;
 import tamaized.frostfell.world.WorldProviderFrostfell;
 
-@Mod(modid = Frostfell.MODID, version = Frostfell.VERSION, acceptedMinecraftVersions = "[1.12,)")
+@Mod(Frostfell.MODID)
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Frostfell {
 
 	public static final String MODID = "frostfell";
-	public static final String VERSION = "${version}";
 
 	public static final Logger LOGGER = LogManager.getLogger(MODID);
 
-	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		LOGGER.info("Brrrr, it's chilly!");
+	public Frostfell() {
+		MinecraftForge.EVENT_BUS.addListener(this::serverStarting);
 	}
 
-	@Mod.EventHandler
-	public void init(FMLInitializationEvent event) {
+	@SubscribeEvent
+	public void init(FMLCommonSetupEvent event) {
+		LOGGER.info("Brrrr, it's chilly!");
 
 		DimensionManager.registerDimension(ConfigHandler.dimID, WorldProviderFrostfell.dimType = DimensionType.register("Frostfell", "_frostfell", ConfigHandler.dimID, WorldProviderFrostfell.class, false));
 
 	}
 
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+	private void serverStarting(FMLServerStartingEvent evt) {
+		evt.getCommandDispatcher().register(
 
-	}
+				LiteralArgumentBuilder.<CommandSource>literal("frostfell").
+						then(FrostfellCommands.Weather.register())
 
-	@Mod.EventHandler
-	public void serverStart(FMLServerStartingEvent event) {
-		event.registerServerCommand(new CommandFrostfell());
+		);
 	}
 
 }
