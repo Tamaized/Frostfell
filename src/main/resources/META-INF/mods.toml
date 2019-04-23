@@ -1,0 +1,12 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/Tamaized/Frostfell/issues"
+[[mods]]
+modId="frostfell"
+version="${version}"
+displayName="Frostfell"
+credits=""
+authors="Tamaized"
+description='''
+Adds a Snowy Ice land dimension
+'''
