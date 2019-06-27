@@ -11,28 +11,29 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.opengl.GLContext;
-import tamaized.frostfell.ConfigHandler;
+import org.lwjgl.opengl.GL;
 import tamaized.frostfell.Frostfell;
+import tamaized.frostfell.world.DimensionFrostfell;
 
 import java.util.Random;
 
-@Mod.EventBusSubscriber(modid = Frostfell.MODID, value = Side.CLIENT)
-public class FrostfellWeatherRenderer extends IRenderHandler {
+@Mod.EventBusSubscriber(modid = Frostfell.MODID, value = Dist.CLIENT)
+public class FrostfellWeatherRenderer implements IRenderHandler {
 
 	private static final ResourceLocation SNOW_TEXTURES = new ResourceLocation("textures/environment/snow.png");
+	private static final int MAX_LAYERS = 10;
 	private static boolean doFog = false;
+	private static int layer = 0;
+	private static float layerfade = 1;
 	private final float[] rainXCoords = new float[1024];
 	private final float[] rainYCoords = new float[1024];
 	private Random random = new Random();
-	private static final int MAX_LAYERS = 10;
-	private static int layer = 0;
-	private static float layerfade = 1;
 
 	{
 		for (int i = 0; i < 32; ++i) {
@@ -48,10 +49,10 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 
 	@SubscribeEvent
 	public static void render(EntityViewRenderEvent.RenderFogEvent e) {
-		if (!doFog || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider.getDimension() != ConfigHandler.dimID)
+		if (!doFog || Minecraft.getInstance().world == null || !(Minecraft.getInstance().world.dimension.getDimension() instanceof DimensionFrostfell))
 			return;
 		Entity entity = e.getEntity();
-		WorldClient worldclient = Minecraft.getMinecraft().world;
+		WorldClient worldclient = Minecraft.getInstance().world;
 		float f1 = e.getFarPlaneDistance();
 		double d0 = (double) ((entity.getBrightnessForRender() & 0xf00000) >> 20) / (60F * ((layer + layerfade) / (float) MAX_LAYERS));
 
@@ -72,32 +73,32 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 			}
 		}
 
-		GlStateManager.setFog(GlStateManager.FogMode.LINEAR);
+		GlStateManager.fogMode(GlStateManager.FogMode.LINEAR);
 
 		if (e.getFogMode() < 0) {
-			GlStateManager.setFogStart(0.0F);
-			GlStateManager.setFogEnd(f1);
+			GlStateManager.fogStart(0.0F);
+			GlStateManager.fogEnd(f1);
 		} else {
-			GlStateManager.setFogStart(f1 * 0.75F);
-			GlStateManager.setFogEnd(f1);
+			GlStateManager.fogStart(f1 * 0.75F);
+			GlStateManager.fogEnd(f1);
 		}
 
-		if (GLContext.getCapabilities().GL_NV_fog_distance) {
-			GlStateManager.glFogi(0x855a, 0x855b);
+		if (GL.getCapabilities().GL_NV_fog_distance) {
+			GlStateManager.fogi(0x855a, 0x855b);
 		}
 
-		if (worldclient.provider.doesXZShowFog((int) entity.posX, (int) entity.posZ)) {
-			GlStateManager.setFogStart(f1 * 0.05F);
-			GlStateManager.setFogEnd(Math.min(f1, 192.0F) * 0.5F);
+		if (worldclient.dimension.doesXZShowFog((int) entity.posX, (int) entity.posZ)) {
+			GlStateManager.fogStart(f1 * 0.05F);
+			GlStateManager.fogEnd(Math.min(f1, 192.0F) * 0.5F);
 		}
 	}
 
 	@SubscribeEvent
 	public static void color(EntityViewRenderEvent.FogColors e) {
-		if (!doFog || Minecraft.getMinecraft().world == null || Minecraft.getMinecraft().world.provider.getDimension() != ConfigHandler.dimID)
+		if (!doFog || Minecraft.getInstance().world == null || !(Minecraft.getInstance().world.dimension.getDimension() instanceof DimensionFrostfell))
 			return;
-		float f = Minecraft.getMinecraft().world.getCelestialAngle((float) e.getRenderPartialTicks());
-		f = MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
+		float f = Minecraft.getInstance().world.getCelestialAngle((float) e.getRenderPartialTicks());
+		f = MathHelper.cos(f * ((float) Math.PI * 2F)) * 2.0F + 0.5F;
 		e.setRed(f);
 		e.setGreen(f);
 		e.setBlue(f);
@@ -107,7 +108,7 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		float f = mc.world.getRainStrength(partialTicks);
 
-		mc.entityRenderer.enableLightmap();
+		mc.gameRenderer.enableLightmap();
 		Entity entity = mc.getRenderViewEntity();
 		if (entity == null)
 			return;
@@ -117,9 +118,9 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		GlStateManager.disableCull();
-		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+		GlStateManager.normal3f(0.0F, 1.0F, 0.0F);
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.alphaFunc(516, 0.1F);
 		double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
 		double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double) partialTicks;
@@ -132,9 +133,9 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 		}
 
 		int j1 = -1;
-		float f1 = (float) world.getWorldTime() + partialTicks;
+		float f1 = (float) world.getGameTime() + partialTicks;
 		bufferbuilder.setTranslation(-d0, -d1, -d2);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
 		final float fadeMulti = 0.03F;
@@ -173,7 +174,7 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 					blockpos$mutableblockpos.setPos(l1, 0, k1);
 					Biome biome = world.getBiome(blockpos$mutableblockpos);
 
-					int j2 = world.getPrecipitationHeight(blockpos$mutableblockpos).getY();
+					int j2 = world.getHeight(Heightmap.Type.MOTION_BLOCKING, blockpos$mutableblockpos).getY();
 					int k2 = j - i1;
 					int l2 = j + i1;
 
@@ -202,7 +203,7 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 								bufferbuilder.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 							}
 
-							double d8 = (double) (-((float) (world.getWorldTime() & 511) + partialTicks) / 512.0F);
+							double d8 = (double) (-((float) (world.getGameTime() & 511) + partialTicks) / 512.0F);
 							double d9 = random.nextDouble() + (double) f1 * (0.01D * (loop + 1F)) * (double) ((float) random.nextGaussian());
 							double d10 = random.nextDouble() + (double) (f1 * (float) random.nextGaussian()) * 0.001D;
 							double d11 = (double) ((float) l1 + 0.5F) - entity.posX;
@@ -230,6 +231,6 @@ public class FrostfellWeatherRenderer extends IRenderHandler {
 		GlStateManager.enableCull();
 		GlStateManager.disableBlend();
 		GlStateManager.alphaFunc(516, 0.1F);
-		mc.entityRenderer.disableLightmap();
+		mc.gameRenderer.disableLightmap();
 	}
 }

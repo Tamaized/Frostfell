@@ -1,19 +1,16 @@
 package tamaized.frostfell.common.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 
-public class BlockTransparent extends BlockSound {
+public class BlockTransparent extends Block {
 
-	public BlockTransparent(Material blockMaterialIn, MapColor blockMapColorIn, SoundType type) {
-		super(blockMaterialIn, blockMapColorIn, type);
+	public BlockTransparent(Block.Properties properties) {
+		super(properties);
 	}
 
 	@Override
@@ -21,13 +18,13 @@ public class BlockTransparent extends BlockSound {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
+
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-		IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+	public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
+		IBlockState iblockstate = world.getBlockState(pos.offset(face));
 		Block block = iblockstate.getBlock();
 
-		if (blockState != iblockstate) {
+		if (state != iblockstate) {
 			return true;
 		}
 
@@ -35,12 +32,7 @@ public class BlockTransparent extends BlockSound {
 			return false;
 		}
 
-		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+		return super.doesSideBlockRendering(state, world, pos, face);
 	}
 
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
 }

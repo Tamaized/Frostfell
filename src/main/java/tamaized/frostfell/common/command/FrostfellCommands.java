@@ -7,7 +7,9 @@ import net.minecraft.command.Commands;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldInfo;
+import tamaized.frostfell.registry.ModDimensions;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class FrostfellCommands {
@@ -59,6 +61,17 @@ public class FrostfellCommands {
 								context.getSource().sendFeedback(new TextComponentTranslation("commands.weather.thunder"), true);
 								return 0;
 							}));
+		}
+	}
+
+	public static class Teleport {
+		public static ArgumentBuilder<CommandSource, ?> register() {
+			return Commands.literal("teleport").
+					requires(cs -> cs.hasPermissionLevel(2)).
+					executes(context -> {
+						Objects.requireNonNull(context.getSource().getEntity()).changeDimension(ModDimensions.TYPE_FROSTFELL.get());
+						return 0;
+					});
 		}
 	}
 }

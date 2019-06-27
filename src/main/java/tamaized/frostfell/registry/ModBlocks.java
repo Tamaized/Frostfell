@@ -2,29 +2,24 @@ package tamaized.frostfell.registry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.material.MaterialColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import tamaized.frostfell.Frostfell;
 import tamaized.frostfell.common.block.BlockIcicle;
 import tamaized.frostfell.common.block.BlockIcyOre;
-import tamaized.frostfell.common.block.BlockSound;
 import tamaized.frostfell.common.block.BlockTransparent;
 
-import static tamaized.frostfell.registry.ModCreativeTabs.TAB;
+import java.util.Objects;
 
-@GameRegistry.ObjectHolder(Frostfell.MODID)
-@Mod.EventBusSubscriber(modid = Frostfell.MODID)
+@ObjectHolder(Frostfell.MODID)
+@Mod.EventBusSubscriber(modid = Frostfell.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModBlocks {
 
 	public static final Block icystone = Blocks.AIR;
@@ -38,17 +33,17 @@ public class ModBlocks {
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		event.getRegistry().registerAll(
 
-				assign(new Block(Material.ROCK, MapColor.STONE), "icystone").setHardness(1.5F).setResistance(10.0F),
+				assign(new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 10.0F)), "icystone"),
 
-				assign(new BlockIcyOre(Material.ROCK, MapColor.ICE), "icyore").setHardness(3.0F).setResistance(5.0F),
+				assign(new BlockIcyOre(Block.Properties.create(Material.ROCK, MaterialColor.ICE).hardnessAndResistance(3.0F, 5.0F)), "icyore"),
 
-				assign(new BlockIcicle(Material.ICE, MapColor.ICE), "icicle").setHardness(0.0F).setLightOpacity(3),
+				assign(new BlockIcicle(Block.Properties.create(Material.ICE, MaterialColor.ICE).hardnessAndResistance(0.0F, 3)), "icicle"),
 
-				assign(new Block(Material.ROCK, MapColor.STONE), "icystonebrick").setHardness(1.5F).setResistance(10.0F),
+				assign(new Block(Block.Properties.create(Material.ROCK, MaterialColor.STONE).hardnessAndResistance(1.5F, 10.0F)), "icystonebrick"),
 
-				assign(new BlockTransparent(Material.ICE, MapColor.ICE, SoundType.GLASS), "icebrick").setHardness(0.5F),
+				assign(new BlockTransparent(Block.Properties.create(Material.ICE, MaterialColor.ICE).hardnessAndResistance(0.5F).sound(SoundType.GLASS)), "icebrick"),
 
-				assign(new BlockSound(Material.ICE, MapColor.SNOW, SoundType.SNOW), "snowbrick").setHardness(0.5F)
+				assign(new Block(Block.Properties.create(Material.ICE, MaterialColor.SNOW).hardnessAndResistance(0.5F).sound(SoundType.SNOW)), "snowbrick")
 
 		);
 	}
@@ -57,22 +52,22 @@ public class ModBlocks {
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
 
-				assign(new ItemBlock(icystone), "icystone"),
+				assign(icystone),
 
-				assign(new ItemBlock(icyore), "icyore"),
+				assign(icyore),
 
-				assign(new ItemBlock(icicle), "icicle"),
+				assign(icicle),
 
-				assign(new ItemBlock(icystonebrick), "icystonebrick"),
+				assign(icystonebrick),
 
-				assign(new ItemBlock(icebrick), "icebrick"),
+				assign(icebrick),
 
-				assign(new ItemBlock(snowbrick), "snowbrick")
+				assign(snowbrick)
 
 		);
 	}
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
 		registerModel(icystone, 0);
 		registerModel(icyore, 0);
@@ -80,29 +75,25 @@ public class ModBlocks {
 		registerModel(icystonebrick, 0);
 		registerModel(icebrick, 0);
 		registerModel(snowbrick, 0);
+	}*/
+
+	private static ItemBlock assign(Block block) {
+		return (ItemBlock) new ItemBlock(block, new Item.Properties().group(ModCreativeTabs.TAB)).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
 	}
 
 	private static Block assign(Block block, String name) {
 		return block
 
-				.setRegistryName(Frostfell.MODID, name)
-
-				.setTranslationKey(Frostfell.MODID + "." + name)
-
-				.setCreativeTab(TAB);
+				.setRegistryName(Frostfell.MODID, name);
 	}
 
 	private static Item assign(Item item, String name) {
 		return item
 
-				.setRegistryName(Frostfell.MODID, name)
-
-				.setTranslationKey(Frostfell.MODID + "." + name)
-
-				.setCreativeTab(TAB);
+				.setRegistryName(Frostfell.MODID, name);
 	}
 
-	@SuppressWarnings("SameParameterValue")
+	/*@SuppressWarnings("SameParameterValue")
 	private static void registerModel(Block block, int meta, String... variant) {
 		if (block.getRegistryName() == null)
 			return;
@@ -121,6 +112,6 @@ public class ModBlocks {
 				)
 
 		);
-	}
+	}*/
 
 }

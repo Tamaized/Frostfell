@@ -1,23 +1,19 @@
 package tamaized.frostfell.registry;
 
 
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import tamaized.frostfell.Frostfell;
 
 import static tamaized.frostfell.registry.ModCreativeTabs.TAB;
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-@GameRegistry.ObjectHolder(Frostfell.MODID)
-@Mod.EventBusSubscriber(modid = Frostfell.MODID)
+@ObjectHolder(Frostfell.MODID)
+@Mod.EventBusSubscriber(modid = Frostfell.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModItems {
 
 	public static final Item permafrost = Items.AIR;
@@ -27,30 +23,26 @@ public class ModItems {
 	public static void register(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
 
-				assign(new Item(), "permafrost"),
+				assign(new Item(new Item.Properties().group(TAB)), "permafrost"),
 
-				assign(new Item(), "iceshard")
+				assign(new Item(new Item.Properties().group(TAB)), "iceshard")
 
 		);
 	}
 
-	@SubscribeEvent
+	/*@SubscribeEvent
 	public static void registerModels(ModelRegistryEvent event) {
 		registerModel(permafrost, 0, "");
 		registerModel(iceshard, 0, "");
-	}
+	}*/
 
 	private static Item assign(Item item, String name) {
 		return item
 
-				.setRegistryName(Frostfell.MODID, name)
-
-				.setTranslationKey(Frostfell.MODID + "." + name)
-
-				.setCreativeTab(TAB);
+				.setRegistryName(Frostfell.MODID, name);
 	}
 
-	private static void registerModel(Item item, int meta, String path) {
+	/*private static void registerModel(Item item, int meta, String path) {
 		if (item.getRegistryName() == null)
 			return;
 		ModelLoader.setCustomModelResourceLocation(
@@ -68,5 +60,5 @@ public class ModItems {
 				)
 
 		);
-	}
+	}*/
 }
