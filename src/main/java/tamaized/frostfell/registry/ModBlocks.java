@@ -1,12 +1,12 @@
 package tamaized.frostfell.registry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -77,8 +77,8 @@ public class ModBlocks {
 		registerModel(snowbrick, 0);
 	}*/
 
-	private static ItemBlock assign(Block block) {
-		return (ItemBlock) new ItemBlock(block, new Item.Properties().group(ModCreativeTabs.TAB)).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
+	private static BlockItem assign(Block block) {
+		return (BlockItem) new BlockItem(block, new Item.Properties().group(ModCreativeTabs.TAB)).setRegistryName(Objects.requireNonNull(block.getRegistryName()));
 	}
 
 	private static Block assign(Block block, String name) {

@@ -1,16 +1,15 @@
 package tamaized.frostfell.world;
 
 import com.google.common.collect.Sets;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Biomes;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeCache;
+import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.biome.provider.OverworldBiomeProviderSettings;
 import net.minecraft.world.gen.OverworldGenSettings;
 import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.Layer;
 import net.minecraft.world.gen.layer.LayerUtil;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -22,9 +21,8 @@ import java.util.Set;
 
 public class FrostfellBiomeProvider extends BiomeProvider {
 
-	private final BiomeCache cache = new BiomeCache(this);
-	private final GenLayer genBiomes;
-	private final GenLayer biomeFactoryLayer;
+	private final Layer genBiomes;
+	private final Layer biomeFactoryLayer;
 
 	private final Biome[] biomes = new Biome[]{
 
@@ -165,27 +163,25 @@ public class FrostfellBiomeProvider extends BiomeProvider {
 	public FrostfellBiomeProvider(OverworldBiomeProviderSettings settingsProvider) {
 		WorldInfo worldinfo = settingsProvider.getWorldInfo();
 		OverworldGenSettings overworldgensettings = settingsProvider.getGeneratorSettings();
-		GenLayer[] agenlayer = LayerUtil.buildOverworldProcedure(worldinfo.getSeed(), worldinfo.getGenerator(), overworldgensettings);
+		Layer[] agenlayer = LayerUtil.buildOverworldProcedure(worldinfo.getSeed(), worldinfo.getGenerator(), overworldgensettings);
 		this.genBiomes = agenlayer[0];
 		this.biomeFactoryLayer = agenlayer[1];
 	}
 
-	@Nullable
 	@Override
-	@SuppressWarnings("ConstantConditions")
-	public Biome getBiome(BlockPos pos, @Nullable Biome defaultBiome) {
-		return this.cache.getBiome(pos.getX(), pos.getZ(), defaultBiome);
+	public Biome getBiome(int p_201545_1_, int p_201545_2_) {
+		return this.biomeFactoryLayer.func_215738_a(p_201545_1_, p_201545_2_);
 	}
 
 	@Override
-	public Biome[] getBiomes(int startX, int startZ, int xSize, int zSize) {
-		return this.genBiomes.generateBiomes(startX, startZ, xSize, zSize, Biomes.DEFAULT);
+	public Biome[] getBiomes(int startX, int startZ, int xSize, int zSize, boolean flag) {
+		return this.genBiomes.generateBiomes(startX, startZ, xSize, zSize);
 	}
 
-	@Override
+	/*@Override
 	public Biome[] getBiomes(int x, int z, int width, int length, boolean cacheFlag) {
 		return cacheFlag && width == 16 && length == 16 && (x & 15) == 0 && (z & 15) == 0 ? this.cache.getCachedBiomes(x, z) : this.biomeFactoryLayer.generateBiomes(x, z, width, length, Biomes.DEFAULT);
-	}
+	}*/
 
 	@Override
 	public Set<Biome> getBiomesInSquare(int centerX, int centerZ, int sideLength) {
@@ -196,7 +192,7 @@ public class FrostfellBiomeProvider extends BiomeProvider {
 		int i1 = k - i + 1;
 		int j1 = l - j + 1;
 		Set<Biome> set = Sets.newHashSet();
-		Collections.addAll(set, this.genBiomes.generateBiomes(i, j, i1, j1, null));
+		Collections.addAll(set, this.genBiomes.generateBiomes(i, j, i1, j1));
 		return set;
 	}
 
@@ -209,7 +205,7 @@ public class FrostfellBiomeProvider extends BiomeProvider {
 		int l = z + range >> 2;
 		int i1 = k - i + 1;
 		int j1 = l - j + 1;
-		Biome[] abiome = this.genBiomes.generateBiomes(i, j, i1, j1, null);
+		Biome[] abiome = this.genBiomes.generateBiomes(i, j, i1, j1);
 		BlockPos blockpos = null;
 		int k1 = 0;
 
@@ -242,18 +238,18 @@ public class FrostfellBiomeProvider extends BiomeProvider {
 	}
 
 	@Override
-	public Set<IBlockState> getSurfaceBlocks() {
+	public Set<BlockState> getSurfaceBlocks() {
 		if (this.topBlocksCache.isEmpty()) {
 			for (Biome biome : this.biomes) {
-				this.topBlocksCache.add(biome.getSurfaceBuilderConfig().getTopMaterial());
+				this.topBlocksCache.add(biome.getSurfaceBuilderConfig().getTop());
 			}
 		}
 
 		return this.topBlocksCache;
 	}
 
-	@Override
+	/*@Override
 	public void tick() {
 		this.cache.cleanupCache();
-	}
+	}*/
 }

@@ -1,11 +1,11 @@
 package tamaized.frostfell.client.world;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -51,8 +51,8 @@ public class FrostfellWeatherRenderer implements IRenderHandler {
 	public static void render(EntityViewRenderEvent.RenderFogEvent e) {
 		if (!doFog || Minecraft.getInstance().world == null || !(Minecraft.getInstance().world.dimension.getDimension() instanceof DimensionFrostfell))
 			return;
-		Entity entity = e.getEntity();
-		WorldClient worldclient = Minecraft.getInstance().world;
+		Entity entity = e.getInfo().getRenderViewEntity();
+		ClientWorld worldclient = Minecraft.getInstance().world;
 		float f1 = e.getFarPlaneDistance();
 		double d0 = (double) ((entity.getBrightnessForRender() & 0xf00000) >> 20) / (60F * ((layer + layerfade) / (float) MAX_LAYERS));
 
@@ -105,7 +105,7 @@ public class FrostfellWeatherRenderer implements IRenderHandler {
 	}
 
 	@Override
-	public void render(float partialTicks, WorldClient world, Minecraft mc) {
+	public void render(int ticks, float partialTicks, ClientWorld world, Minecraft mc) {
 		float f = mc.world.getRainStrength(partialTicks);
 
 		mc.gameRenderer.enableLightmap();

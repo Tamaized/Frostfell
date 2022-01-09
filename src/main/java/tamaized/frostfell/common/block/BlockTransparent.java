@@ -1,11 +1,11 @@
 package tamaized.frostfell.common.block;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IEnviromentBlockReader;
 
 public class BlockTransparent extends Block {
 
@@ -18,10 +18,9 @@ public class BlockTransparent extends Block {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
-
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
-		IBlockState iblockstate = world.getBlockState(pos.offset(face));
+	public boolean doesSideBlockRendering(BlockState state, IEnviromentBlockReader world, BlockPos pos, Direction face) {
+		BlockState iblockstate = world.getBlockState(pos.offset(face));
 		Block block = iblockstate.getBlock();
 
 		if (state != iblockstate) {
