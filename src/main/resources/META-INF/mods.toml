@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[27,)"
+loaderVersion="[39,)"
 issueTrackerURL="https://github.com/Tamaized/Frostfell/issues"
 [[mods]]
 modId="frostfell"
@@ -8,5 +8,5 @@ displayName="Frostfell"
 credits=""
 authors="Tamaized"
 description='''
-Adds a Snowy Ice land dimension
+Adds a Winter Wonderland dimension
 '''
