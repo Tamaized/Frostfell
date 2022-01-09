@@ -1,13 +1,12 @@
-import net.minecraftforge.gradle.common.util.RunConfig
-
 buildscript {
     repositories {
-        maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         jcenter()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -18,67 +17,55 @@ repositories {
     maven {
         url = "https://dvs1.progwml6.com/files/maven/" // JEI
     }
-    /*maven {
-        url = "https://modmaven.k-4u.nl/" // JEI Backup
-    }*/
 }
 
-version = "1.14-${modVersion}${modVersionValue}"
+version = "${artifactor_minecraft_version}-${artifactor_mod_version}." + (hasProperty("CIVersion") ? CIVersion : mod_version)
 group = "tamaized.frostfell"
 archivesBaseName = "Frostfell"
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
-
-class DefaultRunConfig extends RunConfig {
-
-    DefaultRunConfig(Project project, SourceSet sourceSet, boolean client) {
-        super(project, client ? 'client' : 'server')
-        this.taskName "Minecraft_" + name.substring(0, 1).toUpperCase(Locale.US).concat(name.substring(1)) + "_1.14"
-        this.properties 'forge.logging.markers': 'SCAN,AXFORM'
-        this.properties 'forge.logging.console.level': 'debug'
-        this.workingDirectory project.file('run').canonicalPath
-        this.source sourceSet
-        this.environment 'TMP': './tmp/'
-        this.ideaModule project.getName()
-        this.singleInstance true
-    }
-
-    DefaultRunConfig setArgs(String... args) {
-        setArgs(new ArrayList() {
-            {
-                for (String arg : args)
-                    add(arg)
-            }
-        })
-        return this
-    }
-}
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    mappings("${project.mappingType}", "${project.mappingVersion}")
+    mappings("${project.mapping_type}", "${project.mapping_version}")
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-    getRuns().addAll(
-            new DefaultRunConfig(project, sourceSets.main, true).setArgs(
 
-                    '--username', 'Tamaized',
+    runs {
+        client {
+            workingDirectory project.file('run')
 
-                    '--uuid', '16fea09e-314e-4955-88c2-6b552ecf314a'
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
 
-            ),
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
 
-            new DefaultRunConfig(project, sourceSets.main, false)
-    )
-}
+            mods {
+                voidscape {
+                    source sourceSets.main
+                }
+            }
+        }
 
-dependencies {
-    minecraft "net.minecraftforge:forge:${project.minecraftVersion}-${project.forgeVersion}"
+        server {
+            workingDirectory project.file('run')
 
-    //runtime fg.deobf("mezz.jei:${project.jeiVersion}")
+            // Recommended logging data for a userdev environment
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+
+            // Recommended logging level for the console
+            property 'forge.logging.console.level', 'debug'
+
+            mods {
+                voidscape {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
 }
 
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        include 'META-INF/mods.toml'
+    filesMatching("META-INF/mods.toml") {
         expand([
                 'version': "${project.version}"
         ])
@@ -89,10 +76,24 @@ jar {
     manifest {
         attributes(["Specification-Title"     : "Frostfell",
                     "Specification-Vendor"    : "Tamaized",
-                    "Specification-Version"   : "${modVersion}${modVersionValue}",
+                    "Specification-Version"   : "${version}",
                     "Implementation-Title"    : project.name,
                     "Implementation-Version"  : "${version}",
                     "Implementation-Vendor"   : "Tamaized",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")],)
     }
 }
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
+
+    runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
+}
+
+task incrBuildNum doLast {
+    ant.propertyfile(file: "gradle.properties") {
+        entry(key: "mod_version", value: Integer.parseInt(project.mod_version) + 1)
+    }
+}
+
+build.finalizedBy(incrBuildNum)
