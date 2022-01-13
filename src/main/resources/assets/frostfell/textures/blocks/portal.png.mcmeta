@@ -1,0 +1,6 @@
+{
+  "forge": {
+	"loader": "frostfell:portal"
+  },
+  "animation": { }
+}

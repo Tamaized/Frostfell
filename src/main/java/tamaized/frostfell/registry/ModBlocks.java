@@ -1,14 +1,29 @@
 package tamaized.frostfell.registry;
 
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import tamaized.frostfell.blocks.Portal;
+import tamaized.regutil.RegUtil;
+import tamaized.regutil.RegistryClass;
 
-public class ModBlocks {
+public class ModBlocks implements RegistryClass {
 
-	private static DeferredRegister<Block> REGISTRY;
+	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
 
-	public static void init(IEventBus bus) {
+	public static final RegistryObject<Block> PORTAL = REGISTRY.register("portal", () -> new Portal(Block.Properties.of(Material.AMETHYST, MaterialColor.COLOR_CYAN).
+			strength(-1.0F, 3600000.0F).
+			noDrops().
+			isValidSpawn((state, level, pos, entity) -> false).
+			sound(SoundType.AMETHYST)));
+
+	@Override
+	public void init(IEventBus bus) {
 
 	}
 

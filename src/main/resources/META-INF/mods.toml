@@ -1,6 +1,7 @@
 modLoader="javafml"
 loaderVersion="[39,)"
 issueTrackerURL="https://github.com/Tamaized/Frostfell/issues"
+license="All Rights Reserved"
 [[mods]]
 modId="frostfell"
 version="${version}"
@@ -8,5 +9,5 @@ displayName="Frostfell"
 credits=""
 authors="Tamaized"
 description='''
-Winter Wonderland Dimension
+
 '''

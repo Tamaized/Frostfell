@@ -89,6 +89,7 @@ processResources {
 }
 
 jar {
+    //noinspection GroovyAssignabilityCheck
     manifest {
         attributes(["Specification-Title"     : "Frostfell",
                     "Specification-Vendor"    : "Tamaized",
@@ -104,7 +105,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${project.artifactor_minecraft_version}-${project.artifactor_forge_version}"
 
     runtimeOnly fg.deobf("mezz.jei:${project.jei_version}")
-    def reg = "RegUtil:RegUtil-1.18.1:1.0.2"
+    def reg = "RegUtil:RegUtil-1.18.1:1.0.10"
     implementation fg.deobf(reg)
     shade reg
 }
