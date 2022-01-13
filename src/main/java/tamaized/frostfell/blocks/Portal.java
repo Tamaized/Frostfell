@@ -6,13 +6,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.HalfTransparentBlock;
-import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -20,7 +15,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 
-public class Portal extends HalfTransparentBlock implements LiquidBlockContainer {
+public class Portal extends HalfTransparentBlock {
 
 	private static final VoxelShape AABB = Shapes.create(new AABB(0.0F, 0.0F, 0.0F, 1.0F, 0.8125F, 1.0F));
 
@@ -38,21 +33,6 @@ public class Portal extends HalfTransparentBlock implements LiquidBlockContainer
 	@Deprecated
 	public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
 		return Shapes.empty();
-	}
-
-	@Override
-	public FluidState getFluidState(BlockState state) {
-		return Fluids.EMPTY.defaultFluidState();
-	}
-
-	@Override
-	public boolean canPlaceLiquid(BlockGetter iBlockReader, BlockPos blockPos, BlockState blockState, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public boolean placeLiquid(LevelAccessor iWorld, BlockPos blockPos, BlockState blockState, FluidState fluidState) {
-		return false;
 	}
 
 	@Override
