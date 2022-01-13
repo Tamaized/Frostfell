@@ -20,6 +20,7 @@ public class ClientListener {
 		IEventBus busMod = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus busForge = MinecraftForge.EVENT_BUS;
 		TintHandler.setup(busMod);
+		ModelBakeListener.init(busMod);
 		MinecraftForgeClient.registerTextureAtlasSpriteLoader(new ResourceLocation(Frostfell.MODID, "portal"),
 				(atlas, resourceManager, textureInfo, resource, atlasWidth, atlasHeight, spriteX, spriteY, mipmapLevel, image) -> {
 					Resource r = null;

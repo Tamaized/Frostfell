@@ -1,0 +1,15 @@
+{
+  "frostfell.item_group": "Frostfell",
+  "itemGroup.frostfell.item_group": "Frostfell",
+
+  "block.frostfell.portal.name": "Portal",
+  "block.frostfell.icystone.name": "Icy Stone",
+  "block.frostfell.icyore.name": "Icy Ore",
+  "block.frostfell.icicle.name": "Icicles",
+  "block.frostfell.icebrick.name": "Ice Brick",
+  "block.frostfell.icystonebrick.name": "Icy Stone Brick",
+  "block.frostfell.snowbrick.name": "Snow Brick",
+
+  "item.frostfell.permafrost.name": "Permafrost",
+  "item.frostfell.iceshard.name": "Ice Shard"
+}
