@@ -16,7 +16,7 @@ public class ModBlocks implements RegistryClass {
 
 	private static final DeferredRegister<Block> REGISTRY = RegUtil.create(ForgeRegistries.BLOCKS);
 
-	public static final RegistryObject<Block> PORTAL = REGISTRY.register("portal", () -> new Portal(Block.Properties.of(Material.AMETHYST, MaterialColor.COLOR_CYAN).
+	public static final RegistryObject<Portal> PORTAL = REGISTRY.register("portal", () -> new Portal(Block.Properties.of(Material.AMETHYST, MaterialColor.COLOR_CYAN).
 			strength(-1.0F, 3600000.0F).
 			noDrops().
 			isValidSpawn((state, level, pos, entity) -> false).
