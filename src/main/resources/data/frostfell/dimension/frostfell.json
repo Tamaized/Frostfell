@@ -59,6 +59,25 @@
 			  "invert": {
 				"type": "minecraft:y_above",
 				"anchor": {
+				  "absolute": 20
+				},
+				"surface_depth_multiplier": 0.1,
+				"add_stone_depth": false
+			  }
+			},
+			"then_run": {
+			  "type": "block",
+			  "result_state": {
+				"Name": "minecraft:stone"
+			  }
+			}
+		  },{
+			"type": "condition",
+			"if_true": {
+			  "type": "minecraft:not",
+			  "invert": {
+				"type": "minecraft:y_above",
+				"anchor": {
 				  "absolute": 46
 				},
 				"surface_depth_multiplier": 0,
