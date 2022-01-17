@@ -1,0 +1,102 @@
+{
+  "type": "frostfell:frostfell",
+  "generator": {
+	"type": "frostfell:frostfell",
+	"biome_source": {
+	  "type": "frostfell:biomeprovider"
+	},
+	"settings": {
+	  "structures": {
+		"stronghold": {
+		  "distance": 0,
+		  "count": 0,
+		  "spread": 0
+		},
+		"structures": {
+
+		}
+	  },
+	  "noise": {
+		"min_y": -64,
+		"height": 384,
+		"sampling": {
+		  "xz_scale": 0.9999999814507745,
+		  "y_scale": 3.0,
+		  "xz_factor": 80.0,
+		  "y_factor": 0.0166
+		},
+		"top_slide": {
+		  "target": -10,
+		  "size": 3,
+		  "offset": 0
+		},
+		"bottom_slide": {
+		  "target": -30,
+		  "size": 0,
+		  "offset": 0
+		},
+		"size_horizontal": 1,
+		"size_vertical": 2,
+		"terrain_shaper": {
+		  "offset": 0.0,
+		  "factor": 0.90,
+		  "jaggedness": 0.0
+		}
+	  },
+	  "default_block": {
+		"Name": "frostfell:icystone"
+	  },
+	  "default_fluid": {
+		"Name": "minecraft:air"
+	  },
+	  "surface_rule": {
+		"type": "sequence",
+		"sequence": [
+		  {
+			"type": "condition",
+			"if_true": {
+			  "type": "minecraft:not",
+			  "invert": {
+				"type": "minecraft:y_above",
+				"anchor": {
+				  "absolute": 46
+				},
+				"surface_depth_multiplier": 0,
+				"add_stone_depth": false
+			  }
+			},
+			"then_run": {
+			  "type": "block",
+			  "result_state": {
+				"Name": "frostfell:icystone"
+			  }
+			}
+		  },
+		  {
+			"type": "condition",
+			"if_true": {
+			  "offset": 0,
+			  "add_surface_depth": true,
+			  "add_surface_secondary_depth": false,
+			  "surface_type": "floor",
+			  "type": "minecraft:stone_depth"
+			},
+			"then_run": {
+			  "type": "block",
+			  "result_state": {
+				"Name": "minecraft:snow_block"
+			  }
+			}
+		  }
+		]
+	  },
+	  "sea_level": 64,
+	  "disable_mob_generation": false,
+	  "aquifers_enabled": false,
+	  "noise_caves_enabled": true,
+	  "ore_veins_enabled": true,
+	  "noodle_caves_enabled": true,
+	  "legacy_random_source": true
+	}
+  }
+}

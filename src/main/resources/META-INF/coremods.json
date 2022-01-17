@@ -1,3 +1,5 @@
 {
-  "modelpathing": "META-INF/asm/modelpathing.js"
+  "modelpathing": "META-INF/asm/modelpathing.js",
+  "seed": "META-INF/asm/seed.js",
+  "cellwidth": "META-INF/asm/cellwidth.js"
 }

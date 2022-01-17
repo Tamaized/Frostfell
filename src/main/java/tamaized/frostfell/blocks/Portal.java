@@ -25,6 +25,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import tamaized.frostfell.Frostfell;
 import tamaized.frostfell.network.client.ClientPacketPortalFormParticles;
 import tamaized.frostfell.registry.ModBlocks;
+import tamaized.frostfell.world.FrostfellTeleporter;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -86,7 +87,7 @@ public class Portal extends HalfTransparentBlock {
 		if (serverWorld == null)
 			return;
 
-		//entity.changeDimension(serverWorld, makeReturnPortal ? new Teleporter(forcedEntry) : new NoReturnTeleporter());
+		entity.changeDimension(serverWorld, FrostfellTeleporter.INSTANCE);
 	}
 
 	@Override

@@ -22,6 +22,8 @@ import tamaized.frostfell.network.NetworkMessages;
 import tamaized.frostfell.registry.ModBlocks;
 import tamaized.frostfell.registry.ModFeatures;
 import tamaized.frostfell.registry.ModItems;
+import tamaized.frostfell.world.FrostfellChunkGenerator;
+import tamaized.frostfell.world.FrostfellSeededBiomeProvider;
 import tamaized.regutil.RegUtil;
 
 import java.util.function.Consumer;
@@ -53,8 +55,11 @@ public class Frostfell {
 				ModFeatures::new
 		);
 
+		Registry.register(Registry.BIOME_SOURCE, MODID + ":biomeprovider", FrostfellSeededBiomeProvider.CODEC);
+
 		modBus.addListener((Consumer<FMLCommonSetupEvent>) event -> {
 			NetworkMessages.register(NETWORK);
+			Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(MODID, MODID), FrostfellChunkGenerator.codec);
 		});
 
 		forgeBus.addListener((Consumer<TickEvent.PlayerTickEvent>) event -> {
@@ -66,6 +71,10 @@ public class Frostfell {
 							ModBlocks.PORTAL.get().tryToCreatePortal(level, item.blockPosition(), item, event.player);
 		});
 
+	}
+
+	public static boolean checkForDimension(Level world) {
+		return world.dimension().location().equals(DIMENSION.location());
 	}
 
 }

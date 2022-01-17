@@ -21,6 +21,10 @@ public class ModBlocks implements RegistryClass {
 			noDrops().
 			isValidSpawn((state, level, pos, entity) -> false).
 			sound(SoundType.AMETHYST)));
+	public static final RegistryObject<Block> ICYSTONE = REGISTRY.register("icystone", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE).
+			strength(1.5F, 6.0F).
+			requiresCorrectToolForDrops().
+			sound(SoundType.STONE)));
 
 	@Override
 	public void init(IEventBus bus) {
