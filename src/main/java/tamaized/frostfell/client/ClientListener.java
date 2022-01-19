@@ -1,7 +1,9 @@
 package tamaized.frostfell.client;
 
 import com.mojang.blaze3d.platform.NativeImage;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -46,14 +48,22 @@ public class ClientListener {
 
 						throwable1.printStackTrace();
 					}
+					TextureAtlasSprite.Info info = null;
 					if (r != null) {
 						try {
+							AnimationMetadataSection section = r.getMetadata(AnimationMetadataSection.SERIALIZER);
+							if (section == null) {
+								section = AnimationMetadataSection.EMPTY;
+							}
+
+							Pair<Integer, Integer> pair = section.getFrameSize(image.getWidth(), image.getHeight());
+							info = new TextureAtlasSprite.Info(textureInfo.name(), pair.getFirst(), pair.getSecond(), section);
 							r.close();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 					}
-					return new TextureAtlasSprite(atlas, textureInfo, mipmapLevel, atlasWidth, atlasHeight, spriteX, spriteY, image) {
+					return new TextureAtlasSprite(atlas, info == null ? textureInfo : info, mipmapLevel, atlasWidth, atlasHeight, spriteX, spriteY, image) {
 					};
 				});
 		busMod.addListener((Consumer<TextureStitchEvent.Pre>) event -> {
