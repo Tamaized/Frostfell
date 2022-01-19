@@ -20,6 +20,7 @@ public class ModBlocks implements RegistryClass {
 			strength(-1.0F, 3600000.0F).
 			noDrops().
 			isValidSpawn((state, level, pos, entity) -> false).
+			noCollission().
 			sound(SoundType.AMETHYST)));
 	public static final RegistryObject<Block> ICYSTONE = REGISTRY.register("icystone", () -> new Block(Block.Properties.of(Material.STONE, MaterialColor.STONE).
 			strength(1.5F, 6.0F).

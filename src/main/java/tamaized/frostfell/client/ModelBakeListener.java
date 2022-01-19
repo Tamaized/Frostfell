@@ -2,6 +2,8 @@ package tamaized.frostfell.client;
 
 import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -20,8 +22,10 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.pipeline.LightUtil;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.RegistryObject;
 import tamaized.frostfell.Frostfell;
+import tamaized.frostfell.registry.ModBlocks;
 import tamaized.frostfell.registry.ModItems;
 import tamaized.regutil.RegUtil;
 
@@ -89,6 +93,9 @@ public class ModelBakeListener {
 				else
 					Frostfell.LOGGER.error("Null Model! " + mrl);
 			});
+		});
+		bus.addListener((Consumer<FMLClientSetupEvent>) event -> {
+			ItemBlockRenderTypes.setRenderLayer(ModBlocks.PORTAL.get(), RenderType.translucent());
 		});
 	}
 
